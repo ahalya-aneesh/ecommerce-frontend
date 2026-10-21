@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -9,6 +10,7 @@ import {
 
 function Cart() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // Get cart items from Redux store
     const items = useSelector((state) => state.cart.items);
@@ -29,7 +31,7 @@ function Cart() {
     // Show this when cart is empty
     if (items.length === 0) {
         return (
-            <main className="min-h-[80vh] bg-[#f6f4ee] px-6 py-16">
+            <main className="min-h-[calc(100vh-4.5rem)] bg-[#f6f4ee] px-6 py-16">
                 <div className="mx-auto max-w-2xl text-center">
                     <p className="text-5xl">🛍️</p>
 
@@ -53,7 +55,7 @@ function Cart() {
     }
 
     return (
-        <main className="min-h-screen bg-[#f6f4ee] px-5 py-10 text-[#263c2d] sm:px-10">
+        <main className="min-h-[calc(100vh-4.5rem)] bg-[#f6f4ee] px-5 py-10 text-[#263c2d] sm:px-10">
             <div className="mx-auto max-w-6xl">
 
                 {/* Back to products */}
@@ -80,12 +82,12 @@ function Cart() {
                         {items.map((item) => (
                             <article
                                 key={item._id}
-                                className="flex flex-col gap-4 border border-[#e5e4dc] bg-white p-4 sm:flex-row sm:items-center"
+                                className="flex flex-col gap-4 rounded-2xl border border-[#e5e4dc] bg-white p-4 shadow-[0_8px_28px_rgba(38,60,45,0.04)] sm:flex-row sm:items-center"
                             >
                                 <img
                                     src={item.image}
                                     alt={item.name}
-                                    className="h-32 w-full rounded-sm bg-[#f6f4ee] object-cover sm:w-32"
+                                    className="h-32 w-full rounded-xl bg-[#f6f4ee] object-contain p-2 sm:w-32"
                                 />
 
                                 <div className="min-w-0 flex-1">
@@ -156,7 +158,7 @@ function Cart() {
                     </section>
 
                     {/* Order summary */}
-                    <aside className="h-fit border border-[#e5e4dc] bg-white p-6">
+                    <aside className="h-fit rounded-2xl border border-[#e5e4dc] bg-white p-6 shadow-[0_12px_36px_rgba(38,60,45,0.06)]">
                         <h2 className="text-xl font-semibold">
                             Order Summary
                         </h2>
@@ -181,10 +183,10 @@ function Cart() {
 
                         <button
                             type="button"
-                            disabled
-                            className="mt-6 w-full cursor-not-allowed rounded-md bg-[#d9ddd4] px-5 py-3 font-semibold text-[#697067]"
+                            onClick={() => navigate("/checkout")}
+                            className="mt-6 w-full rounded-md bg-[#263c2d] px-5 py-3 font-semibold text-white transition hover:bg-[#3b5843] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#263c2d]"
                         >
-                            Checkout Coming Soon
+                            Proceed to Checkout
                         </button>
                     </aside>
                 </div>

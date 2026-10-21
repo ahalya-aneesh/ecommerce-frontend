@@ -2,10 +2,13 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getProduct } from "../redux/productSlice";
-import "./home.css";
 import { addToWishlist } from "../redux/wishlistSlice";
+import { addToCart } from "../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
+import AddToCartButton from "../components/AddToCartButton";
 function Home() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { products, loading, error } = useSelector((state) => state.product);
      const wishlist = useSelector(
         (state) => state.wishlist.wishlist
@@ -15,125 +18,107 @@ function Home() {
         dispatch(getProduct());
     }, [dispatch]);
 
+    const handleBuyNow = (product) => {
+        dispatch(addToCart(product));
+        navigate("/cart");
+    };
+
     return (
         <div className="home">
-
-            {/* Navbar */}
-            <nav className="navbar">
-
-                <Link to="/" className="logo">
-                    Everyday
-                </Link>
-
-                <div className="nav-links">
-                     <Link to="/register">Register</Link>
-                 <Link to="/login">Login</Link>
-                
-                    <Link to="/">Home</Link>
-                    <Link to="/products">Products</Link>
-                    <Link to="/about">About</Link>
-                 <Link to="/wishlist">Wishlist ♡</Link>
-                
-    
-                </div>
-
-                <Link to="/products" className="nav-shop-btn">
-                    Shop Now
-                </Link>
-
-            </nav>
-
-
             {/* Hero Section */}
-            <main className="hero">
+            <main className="storefront-hero">
 
                 {/* Left Content */}
-                <section className="hero-content">
+                <section className="storefront-hero-content">
 
-                    <p className="small-title">
-                        A little more you
+                    <p className="storefront-eyebrow">
+                        Everything you need, in one place.
                     </p>
 
                     <h1>
-                        Good finds for
-                        <span> everyday living.</span>
+                        Find your next
+                        <span> everyday favorite.</span>
                     </h1>
 
-                    <p className="hero-description">
-                        Discover thoughtful picks for your home,
-                        your routine, and everything in between.
+                    <p className="storefront-description">
+                        A little something for every part of your day. Browse
+                        the collection and find pieces you’ll love to bring home.
                     </p>
 
-                    <div className="hero-buttons">
+                    <div className="storefront-hero-actions">
 
                         <Link
                             to="/products"
-                            className="shop-button"
+                            className="storefront-primary-button"
                         >
-                            Shop now
-                            <span>→</span>
+                            Explore the shop <span aria-hidden="true">→</span>
                         </Link>
 
                         <Link
                             to="/products"
-                            className="explore-button"
+                            className="storefront-secondary-button"
                         >
-                            Explore collection
+                            Browse collection
                         </Link>
 
                     </div>
 
-                    <p className="bottom-text">
-                        A considered collection, made for real life.
-                    </p>
+                    <div className="storefront-social-proof">
+                        <span className="storefront-proof-stars" aria-label="Five stars">★★★★★</span>
+                        <span>Little finds, lots of happy homes</span>
+                    </div>
 
                 </section>
 
 
                 {/* Right Image */}
-                <section className="hero-image">
+                <section className="storefront-hero-image" aria-label="Shop the latest collection">
 
                     <img
-                        src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=85"
-                        alt="Warm, thoughtfully arranged independent shop"
+                        src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?auto=format&fit=crop&w=1600&q=85"
+                        alt="Browsing a curated clothing collection in a shop"
                     />
 
-                    <div className="image-overlay"></div>
+                    <div className="storefront-image-overlay"></div>
 
-                    <div className="image-caption">
-                        <span>01</span>
-                        <p>Find something lovely</p>
+                    <div className="storefront-image-note">
+                        <span>THE EVERYDAY EDIT</span>
+                        <p>Good things are just around the corner.</p>
                     </div>
 
+                    <div className="storefront-image-badge">
+                        <span aria-hidden="true">✦</span>
+                        <p>Find your<br />kind of good</p>
+                    </div>
                 </section>
 
             </main>
 
 
             {/* Features */}
-            <section className="features">
+            <section className="storefront-benefits" aria-label="Shopping benefits">
 
-                <div className="feature">
-                    <div className="feature-icon">✦</div>
+                <div className="storefront-benefit">
+                    <span className="storefront-benefit-icon" aria-hidden="true">✦</span>
                     <div>
-                        <h3>Thoughtful choices</h3>
-                        <p>Products selected for everyday life.</p>
+                        <h3>Curated with care</h3>
+                        <p>Thoughtful finds for your everyday.</p>
                     </div>
                 </div>
 
-                <div className="feature">
-                    <div className="feature-icon">♡</div>
+                <div className="storefront-benefit">
+                    <span className="storefront-benefit-icon" aria-hidden="true">♡</span>
                     <div>
-                        <h3>Made for you</h3>
-                        <p>Simple products you'll love to use.</p>
+                        <h3>Something for everyone</h3>
+                        <p>Explore a collection made for real life.</p>
                     </div>
                 </div>
 
-                <div className="feature">
-                    <div className="feature-icon">✓</div>
+                <div className="storefront-benefit">
+                    <span className="storefront-benefit-icon" aria-hidden="true">✓</span>
                     <div>
-                        <h3>Easy shopping</h3>
-                        <p>A simple and comfortable experience.</p>
+                        <h3>Easy, happy shopping</h3>
+                        <p>Find it, love it, add it to your cart.</p>
                     </div>
                 </div>
 
@@ -141,23 +126,24 @@ function Home() {
 
 
             {/* Collection Section */}
-            <section className="collection">
+            <section className="storefront-collection">
 
-                <div className="collection-heading">
-                    <p>OUR COLLECTION</p>
+                <div className="storefront-collection-heading">
+                    <p>THE GOOD-FINDS CLUB</p>
 
                     <h2>
-                        Things you'll want
+                        A little something
                         <br />
-                        to keep around.
+                        for every day.
                     </h2>
+                    <span>Meet the pieces making everyday life a little more lovely.</span>
                 </div>
 
                 <Link
                     to="/products"
-                    className="view-products"
+                    className="storefront-view-products"
                 >
-                    View all products →
+                    See everything <span aria-hidden="true">→</span>
                 </Link>
 
             </section>
@@ -206,6 +192,16 @@ function Home() {
                                 <div className="home-product-footer">
                                     <span>₹{Number(product.price).toLocaleString("en-IN")}</span>
                                     <Link to={`/product/${product._id}`}>View details →</Link>
+                                </div>
+                                <div className="home-product-actions">
+                                    <AddToCartButton product={product} />
+                                    <button
+                                        type="button"
+                                        disabled={Number(product.stock) <= 0}
+                                        onClick={() => handleBuyNow(product)}
+                                    >
+                                        Buy Now
+                                    </button>
                                 </div>
                             </article>
                         ))}

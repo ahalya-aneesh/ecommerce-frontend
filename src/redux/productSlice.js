@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import axios from 'axios'
+import api from "../api";
 
 const initialState={
     products:[],
@@ -9,13 +9,13 @@ const initialState={
 }
 
 export const getProduct=createAsyncThunk('product/getProduct',async()=>{
-    const response=await axios.get('http://localhost:3000/products/')
+    const response=await api.get('/products/')
     return response.data.products
 })
 
 export const addProduct=createAsyncThunk('product/addProduct',async(product,{rejectWithValue})=>{
   try {
-    const response=await axios.post('http://localhost:3000/products/add',product,{withCredentials:true})
+    const response=await api.post('/products/add',product)
     return response.data.newProduct
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || error.message)
@@ -23,12 +23,12 @@ export const addProduct=createAsyncThunk('product/addProduct',async(product,{rej
 })
 
 export const getProductById=createAsyncThunk('product/getProductById',async(id)=>{
-    const response=await axios.get(`http://localhost:3000/products/${id}`)
+    const response=await api.get(`/products/${id}`)
     return response.data?.product || response.data || null
 })
 
 export const deleteProduct=createAsyncThunk('/product/deleteProduct',async(id)=>{
-    await axios.delete(`http://localhost:3000/products/${id}`,{withCredentials:true})
+    await api.delete(`/products/${id}`)
     return id
 })
 
@@ -38,7 +38,7 @@ Object.entries(product).forEach(([key, value]) => formData.append(key, value))
 if (image) {
     formData.append('image', image)
 }
-const response=await axios.put(`http://localhost:3000/products/${id}`,formData,{withCredentials:true})
+const response=await api.put(`/products/${id}`,formData)
 return response.data.updatedProduct
 })
 

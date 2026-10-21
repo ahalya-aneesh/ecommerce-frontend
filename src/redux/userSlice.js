@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../api";
 
 const initialState = {
     user: null,
     loading: false,
+    authChecking: true,
     error: null,
 };
 
@@ -13,8 +14,8 @@ export const registerUser = createAsyncThunk(
     "user/registerUser",
     async (user, { rejectWithValue }) => {
         try {
-            const response = await axios.post(
-                "http://localhost:3000/user/register",
+            const response = await api.post(
+                "/user/register",
                 user
             );
 
@@ -33,12 +34,9 @@ export const loginUser = createAsyncThunk(
     "user/loginUser",
     async (user, { rejectWithValue }) => {
         try {
-            const response = await axios.post(
-                "http://localhost:3000/user/login",
+            const response = await api.post(
+                "/user/login",
                 user,
-                {
-                    withCredentials: true
-                }
             );
 
             return response.data.user;
@@ -56,17 +54,26 @@ export const getProfile = createAsyncThunk(
     "user/getProfile",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get(
-                "http://localhost:3000/user/profile",
-                {
-                    withCredentials: true
-                }
-            );
+            const response = await api.get("/user/profile");
 
             return response.data.user;
         } catch (error) {
             return rejectWithValue(
                 error.response?.data?.message || "Failed to fetch profile"
+            );
+        }
+    }
+);
+
+export const logoutUser = createAsyncThunk(
+    "user/logoutUser",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await api.post("/user/logout");
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.message || error.message || "Logout failed"
             );
         }
     }
@@ -109,6 +116,7 @@ const userSlice = createSlice({
 
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
+                state.authChecking = false;
                 state.user = action.payload;
             })
 
@@ -121,18 +129,26 @@ const userSlice = createSlice({
         // GET PROFILE
         builder
             .addCase(getProfile.pending, (state) => {
-                state.loading = true;
+                state.authChecking = true;
                 state.error = null;
             })
 
             .addCase(getProfile.fulfilled, (state, action) => {
-                state.loading = false;
+                state.authChecking = false;
                 state.user = action.payload;
             })
 
-            .addCase(getProfile.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
+            .addCase(getProfile.rejected, (state) => {
+                state.authChecking = false;
+                state.user = null;
+                state.error = null;
+            });
+
+        builder
+            .addCase(logoutUser.fulfilled, (state) => {
+                state.user = null;
+                state.authChecking = false;
+                state.error = null;
             });
     }
 });

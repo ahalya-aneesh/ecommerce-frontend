@@ -1,26 +1,60 @@
-import { Link, NavLink } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { logoutUser } from '../redux/userSlice'
+import BrandLogo from './BrandLogo'
+import '../pages/home.css'
 
 function Navbar() {
+  const user = useSelector((state) => state.user.user)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [logoutError, setLogoutError] = useState('')
+  const [loggingOut, setLoggingOut] = useState(false)
+
+  const handleLogout = async () => {
+    setLogoutError('')
+    setLoggingOut(true)
+
+    try {
+      await dispatch(logoutUser()).unwrap()
+      navigate('/', { replace: true })
+    } catch (error) {
+      setLogoutError(error)
+    } finally {
+      setLoggingOut(false)
+    }
+  }
+
   return (
-    <header className="border-b border-[#e5e4dc] bg-[#f6f4ee] px-6 sm:px-10 lg:px-16">
-      <nav className="mx-auto flex h-[72px] max-w-7xl items-center justify-between" aria-label="Main navigation">
-        <Link to="/" className="text-xl font-semibold tracking-tight text-[#263c2d]">
-          goodfinds<span className="text-[#8b9c78]">.</span>
-        </Link>
-        <NavLink
-          to="/products"
-          className={({ isActive }) =>
-            `inline-flex min-h-10 items-center rounded-md px-5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#263c2d] ${
-              isActive
-                ? 'bg-[#263c2d] text-white'
-                : 'text-[#465248] hover:bg-[#e8eee5] hover:text-[#263c2d]'
-            }`
-          }
-        >
-          Products
-        </NavLink>
-      </nav>
-    </header>
+    <nav className="navbar" aria-label="Main navigation">
+      <BrandLogo />
+
+      <div className="nav-links">
+        {!user && <NavLink to="/register" className={({ isActive }) => isActive ? 'active' : undefined}>Register</NavLink>}
+        {!user && <NavLink to="/login" className={({ isActive }) => isActive ? 'active' : undefined}>Login</NavLink>}
+        <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : undefined}>Home</NavLink>
+        <NavLink to="/products" className={({ isActive }) => isActive ? 'active' : undefined}>Products</NavLink>
+        <NavLink to="/wishlist" className={({ isActive }) => isActive ? 'active' : undefined}>Wishlist ♡</NavLink>
+        <NavLink to="/cart" className={({ isActive }) => isActive ? 'active' : undefined}>Cart</NavLink>
+        {user?.role === 'admin' && (
+          <NavLink to="/admin/dashboard" className={({ isActive }) => isActive ? 'active' : undefined}>
+            Admin Dashboard
+          </NavLink>
+        )}
+        {user && (
+          <button type="button" className="nav-logout-btn" onClick={handleLogout} disabled={loggingOut}>
+            {loggingOut ? 'Logging out...' : 'Logout'}
+          </button>
+        )}
+      </div>
+
+      {logoutError && <p className="nav-logout-error" role="alert">{logoutError}</p>}
+
+      <Link to="/products" className="nav-shop-btn">
+        Shop Now
+      </Link>
+    </nav>
   )
 }
 

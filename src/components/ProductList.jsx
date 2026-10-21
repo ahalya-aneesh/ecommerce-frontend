@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteProduct, getProduct } from '../redux/productSlice'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import ProductForm from './ProductForm'
 
 function ProductList() {
@@ -28,7 +28,7 @@ function ProductList() {
                         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#71836e]">
                             The collection
                         </p>
-                        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Products</h1>
+                        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Admin dashboard</h1>
                     </div>
                     <p className="text-sm text-[#697067]">
                         {products.length} {products.length === 1 ? 'item' : 'items'}
@@ -42,7 +42,7 @@ function ProductList() {
                                 Loading products...
                             </p>
                         ) : error ? (
-                            <p className="py-10 text-center text-sm text-red-700" role="alert">
+                            <p className="py-10 text-center text-sm text-[#8e473e]" role="alert">
                                 {error}
                             </p>
                         ) : products.length === 0 ? (
@@ -57,18 +57,18 @@ function ProductList() {
                                 {products.map((product) => (
                                     <article
                                         key={product._id}
-                                        className="flex min-h-56 flex-col border border-[#e6e5dd] bg-white p-5 transition-shadow hover:shadow-md"
+                                        className="group flex min-h-56 flex-col overflow-hidden rounded-2xl border border-[#e5e4dc] bg-white p-4 shadow-[0_8px_28px_rgba(38,60,45,0.04)] transition duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(38,60,45,0.1)] motion-reduce:transition-none motion-reduce:hover:transform-none"
                                     >
                                         {product.image ? (
                                             <img
                                                 src={product.image}
                                                 alt={product.name}
-                                                className="mb-5 h-48 w-full rounded-sm bg-[#f6f4ee] object-cover"
+                                                className="mb-5 h-72 w-full rounded-xl bg-[#f1f5ee] object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none"
                                             />
                                         ) : (
                                             <div
                                                 aria-hidden="true"
-                                                className="mb-5 flex h-48 items-center justify-center rounded-sm bg-[#e8eee5] text-6xl font-semibold text-[#b8c8b3]"
+                                                className="mb-5 flex h-72 items-center justify-center rounded-xl bg-[#e8eee5] text-6xl font-semibold text-[#71836e]"
                                             >
                                                 {product.name?.charAt(0)?.toUpperCase() || "?"}
                                             </div>
@@ -85,24 +85,18 @@ function ProductList() {
                                         <p className="mt-1 text-sm text-[#697067]">
                                             {product.stock} in stock
                                         </p>
-                                        <div className="mt-auto flex items-center justify-between gap-3 border-t border-[#eeede7] pt-4">
-                                            <Link
-                                                to={`/product/${product._id}`}
-                                                className="text-sm font-semibold text-[#3c6045] underline decoration-[#b9c6b5] underline-offset-4 hover:text-[#263c2d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#263c2d]"
-                                            >
-                                                View details
-                                            </Link>
+                                        <div className="mt-auto flex items-center justify-end gap-3 border-t border-[#eeede7] pt-4">
                                             <button
                                                 type="button"
                                                 onClick={() => handleDelete(product._id)}
                                                 aria-label={`Delete ${product.name}`}
-                                                className="rounded px-2 py-1 text-sm font-medium text-[#9a5147] hover:bg-[#fbefec] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9a5147]"
+                                                className="rounded border border-[#eed4cf] px-3 py-2 text-sm font-semibold text-[#9a5147] transition duration-200 hover:-translate-y-0.5 hover:bg-[#fbefec] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9a5147] motion-reduce:transition-none motion-reduce:hover:transform-none"
                                             >
                                                 Delete
                                             </button>
                                             <button
                                                 type="button"
-                                                className="rounded px-2 py-1 text-sm font-medium text-[#9a5147] hover:bg-[#fbefec] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9a5147]"
+                                                className="rounded bg-[#263c2d] px-3 py-2 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-[#3b5843] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#263c2d] motion-reduce:transition-none motion-reduce:hover:transform-none"
                                                 onClick={() => navigate('/updateproduct', { state: { product } })}
                                             >
                                                 Edit
@@ -114,7 +108,7 @@ function ProductList() {
                         )}
                     </section>
 
-                    <aside className="border border-[#e6e5dd] bg-white p-5 sm:p-6">
+                    <aside>
                         <ProductForm />
                     </aside>
                 </div>

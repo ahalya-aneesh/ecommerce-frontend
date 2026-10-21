@@ -44,7 +44,7 @@ function UpdateProduct() {
 
         try {
             await dispatch(updateProduct({ id: product._id, product: updatedProduct, image })).unwrap()
-            navigate('/products')
+            navigate('/admin/dashboard')
         } catch (updateError) {
             setError(updateError.message || String(updateError))
         }
@@ -55,8 +55,12 @@ function UpdateProduct() {
   
 
     return (
-        <form onSubmit={handleSubmit} className="w-full">
-                <h2 className="mb-1 text-xl font-semibold text-[#263c2d]">
+        <main className="min-h-[calc(100vh-4.5rem)] bg-[#f6f4ee] px-5 py-10 text-[#263c2d] sm:px-8 sm:py-14">
+          <form onSubmit={handleSubmit} className="mx-auto w-full max-w-2xl rounded-3xl border border-[#e5e4dc] bg-white p-6 shadow-[0_24px_80px_rgba(38,60,45,0.08)] sm:p-10">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#71836e]">
+                    Product management
+                </p>
+                <h2 className="mb-1 text-2xl font-semibold tracking-tight text-[#263c2d] sm:text-3xl">
                     Edit Product
                 </h2>
                 <p className="mb-6 text-sm leading-6 text-[#697067]">
@@ -160,7 +164,7 @@ function UpdateProduct() {
                         <img
                             src={product.image}
                             alt={product.name}
-                            className="mb-3 h-40 w-full rounded-sm bg-[#f6f4ee] object-cover"
+                            className="mb-3 h-40 w-full rounded-xl bg-[#f6f4ee] object-contain p-2"
                         />
                     )}
                     <input
@@ -173,15 +177,16 @@ function UpdateProduct() {
                     />
                 </div>
 
-                {error && <p role="alert" className="mb-4 text-sm text-red-700">{error}</p>}
+                {error && <p role="alert" className="mb-4 text-sm text-[#8e473e]">{error}</p>}
 
                 <button
                     type="submit"
-                    className="w-full rounded-sm bg-[#263c2d] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#3b5843] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#263c2d]"
+                    className="mt-2 min-h-12 w-full rounded-xl bg-[#263c2d] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#3b5843] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#263c2d]"
                 >
-                    update
+                    Save changes
                 </button>
-        </form>
+          </form>
+        </main>
     )
 }
 
